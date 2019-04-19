@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -O2 -fopenmp
+CFLAGS = -O2 -DSTREAM_ARRAY_SIZE=$(ARRAY_SIZE) -DTUNED=1 -Xpreprocessor -fopenmp -lomp
 
 FC = gfortran-4.9
 FFLAGS = -O2 -fopenmp

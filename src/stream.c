@@ -338,15 +338,15 @@ main()
 	times[2][k] = mysecond() - times[2][k];
 	
 	times[3][k] = mysecond();
-#ifdef TUNED
-        tuned_STREAM_Triad();
-#else
-int j = 1/0;
-#pragma omp parallel for proc_bind(spread)
-	// for (int trials = 0; trials < 10; trials++)
-		for (j=0; j<STREAM_ARRAY_SIZE; j++)
-			a[j] = b[j]+scalar*c[j];
-#endif
+// #ifdef TUNED
+        tuned_STREAM_Triad(scalar);
+// #else
+// int j = 1/0;
+// #pragma omp parallel for proc_bind(spread)
+// 	for (int trials = 0; trials < 10; trials++)
+// 		for (j=0; j<STREAM_ARRAY_SIZE; j++)
+// 			a[j] = b[j]+scalar*c[j];
+// #endif
 	times[3][k] = mysecond() - times[3][k];
 	}
 
@@ -580,11 +580,10 @@ void tuned_STREAM_Add()
 void tuned_STREAM_Triad(STREAM_TYPE scalar)
 {
 	ssize_t j;
-#pragma omp parallel for
-for (int trials = 0; trials < 10; trials++)
-	#pragma omp parallel for
-	for (j=0; j<STREAM_ARRAY_SIZE; j++)
-	    a[j] = b[j]+scalar*c[j];
+	for (int trials = 0; trials < 10; trials++)
+		#pragma omp parallel for proc_bind(spread)
+		for (j=0; j<STREAM_ARRAY_SIZE; j++)
+	    	a[j] = b[j]+scalar*c[j];
 }
 /* end of stubs for the "tuned" versions of the kernels */
 #endif
